@@ -1,0 +1,51 @@
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        padding: 20px;
+    }
+    form {
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ccc;
+        max-width: 400px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    h3 {
+        margin-bottom: 20px;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #1e88ff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #d32f2f;
+    }
+</style>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>글 삭제</title>
+</head>
+
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        <h3>{{ post.postname }} 삭제 하시겠습니까?</h3>
+        <button>삭제</button>
+    </form>
+</body>
+
+</html>

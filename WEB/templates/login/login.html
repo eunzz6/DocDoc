@@ -1,0 +1,313 @@
+<style>
+  /* CSS 스타일 */
+  #typing-text {
+    font-size: 28px;
+    color: #fff;
+    display: inline-block;
+    overflow: hidden;
+    animation: typing 2s steps(40, end), blink-caret 1.5s step-end infinite;
+    white-space: nowrap; /* 타이핑 커서 효과를 위한 선 추가 */
+  }
+
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+
+  @keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: #000; }
+  }
+</style>
+<script>
+  // JavaScript 코드
+  const typingText = "Hello, Friend🐹";
+  const typingElement = document.getElementById('typing-text');
+
+  function typeWriter(text, element) {
+    let index = 0;
+    const interval = setInterval(() => {
+      element.textContent += text.charAt(index);
+      index++;
+      if (index >= text.length) {
+        clearInterval(interval);
+      }
+    }, 100);
+  }
+
+  typeWriter(typingText, typingElement);
+</script>
+
+<style>
+
+@font-face {
+  font-family: 'SUIT-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+  * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'SUIT-Regular';
+      font-weight: 200;
+      margin: 0;
+      padding: 0;
+    }
+    .wrapper {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #ebecf0;
+      overflow: hidden;
+    }
+    .container {
+      border-radius: 10px;
+      box-shadow: -5px -5px 10px #fff, 5px 5px 10px #babebc;
+      position: absolute;
+      width: 768px;
+      min-height: 480px;
+      overflow: hidden;
+    }
+    form {
+      background: #ebecf0;
+      display: flex;
+      flex-direction: column;
+      padding: 0 50px;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+    }
+    form input {
+      background: #eee;
+      padding: 16px;
+      margin: 8px 0;
+      width: 85%;
+      border: 0;
+      outline: none;
+      border-radius: 20px;
+      box-shadow: inset 7px 2px 10px #babebc, inset -5px -5px 12px #fff;
+    }
+    button {
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 15px 45px;
+      margin: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 80ms ease-in;
+    }
+    .form_btn {
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px
+    }
+    .form_btn:active {
+      box-shadow: inset 1px 1px 2px #fff, inset -1px -1px 2px #babebc;
+    }
+    .overlay_btn {
+        background-color: #1e88ff;
+        color: #fff;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px
+      }
+    .sign-in-container {
+      position: absolute;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      transition: all 0.5s;
+    }
+    
+    
+    .overlay-right {
+      display: flex;
+      flex-direction: column;
+      padding: 0 50px;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      background-color: #1e88ff;
+      color: #fff;
+      transition: all 0.5s;
+    }
+    .container.right-panel-active .sign-in-container {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    .container.right-panel-active .sign-up-container {
+      transform: translateX(100%);
+      opacity: 1;
+      z-index: 2;
+    }
+    .container.right-panel-active .overlay-right {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    .container.right-panel-active .overlay-left {
+      transform: translateX(-100%);
+      opacity: 1;
+      z-index: 2;
+    }
+    .social-links {
+      margin: 20px 0;
+    }
+    form h1 {
+      font-weight: normal;
+      margin: 0;
+      color: #000;
+    }
+
+    h4 {
+      font-weight: normal;
+      margin: 0;
+      font-size: 40px;
+      color: #fff;
+    }
+
+    p {
+      font-size: 14px;
+      font-weight: 200;
+      letter-spacing: 0.5px;
+      margin: 20px 0 30px;
+      line-height: 1.5;
+    }
+    span {
+      padding: 5px 0 0 0;
+      font-size: 14px;
+      color: #000;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .social-links div {
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 5px;
+      border-radius: 50%;
+      box-shadow: -5px -5px 10px #fff, 5px 5px 8px #babebc;
+      cursor: pointer;
+    }
+    .social-links a {
+      color: #000;
+    }
+    .social-links div:active {
+      box-shadow: inset 1px 1px 2px #babebc, inset -1px -1px 2px #fff;
+    }
+    .form-color {
+      background-color: #1e88ff;
+      color: #fff;
+    }
+    .form_btn:hover {
+      background-color: #1e88ff;
+      color: #ffffff;
+    }
+
+    .overlay_btn:hover {
+      background-color: #ffffff;
+      color: #1e88ff;
+      
+    }
+
+    html, body {
+      height: 100%;
+    }
+    
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    span-yang {
+      font-weight: 400;
+      font-size: 15px;
+    }
+    
+    /* 푸터에 대한 스타일 */
+    footer {
+      background : #ebecf0;
+      margin-top: auto;
+      text-align: center;
+    }
+    
+</style>
+
+<head>
+  <meta charset="utf-8">
+  <!-- 웹브라우져 호환성 설정 IE=edge IE8 버전 이상 표준모드로 렌더링  -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- viewport : 렌더링 영역의 크기를 설정 : 반응형 웹에서 사용 -->
+  <!-- width=device-width : 페이지 너비를 스크린 너비로 설정 -->
+  <!-- initial-scale=1.0 : 1배로 설정 0 ~ 10 사이의 수를 가짐 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DocDoc</title>
+  <link rel="icon" type="image/png" href="zz.png">
+  <!-- 다른 메타 태그와 스타일 시트 링크 등이 여기에 올 수 있습니다 -->
+</head>
+
+<div class="wrapper">
+<div class="container">
+  <div class="sign-in-container">
+    <form method="post" action="{% url 'login:login' %}" style="padding:0px;">
+      {% csrf_token %}
+      <h1>Sign In</h1>
+      <span>or use your account</span>
+      <input type="text" class="form-control" placeholder="Username" name="username" id="username">
+      <input type="password" class="form-control" placeholder="Password" name="password" id="password">
+      {% if error %}
+        <p class="error" style="font-size:13px; color:#e34c4c;">{{ error }}<br>{{error2}}
+        </p>
+        
+      {% endif %}
+      <button class="form_btn" type="submit">Sign In</button>
+    </form>
+  </div>
+
+
+  
+  <div class="overlay-container">
+    <div class="overlay-right">
+      {% csrf_token %}
+      <h4><span id="typing-text">DocDoc 🩺</span></h4>
+      <p><span class='yang'>Enter</span> your personal details<br>and <span class='yang'>start</span> a journey with us</p>
+      
+      <a class="nav-link" href="{% url 'login:agree' %}">
+        <button id="signUp" class="overlay_btn">Sign Up</button>
+      </a>
+      
+    </div>
+  </div>
+</div>
+</div>
+
+
+ 
+<footer>
+  <a href="/use_acc" style="color: #777;
+  position: relative;
+  display: inline-block;
+  text-decoration: auto;">Privacy</a>
+  <br>
+  <br>
+  Copyright © 2023 KT Corp. All rights reserved.
+  <address>Contact webmaster for more information. 010-AIVLE-34</address>
+</footer>

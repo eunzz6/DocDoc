@@ -1,0 +1,503 @@
+<style>
+  @font-face {
+    font-family: 'SUIT-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  *{
+    font-family: 'SUIT-Regular';
+    font-weight: normal;
+  }
+  
+  .custom-select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background: #ffffff;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 200px;
+      margin-bottom: 10px;
+      margin-top: 10px;
+      margin-left: 10px;
+    }
+      
+  .custom-select:focus {
+    outline: none;
+    border-color: #5b9dd9;
+    box-shadow: 0 0 5px rgba(91, 157, 217, 0.5);
+  }
+    
+  body {
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  header {
+    height: 100px;
+    text-align: right;
+    color: white;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  header>.wrap>ul {
+    float: right;
+    font-size: 25px;
+  }
+
+  nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  
+
+  .featured-post {
+    background-color: #f2f2f2;
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .search-section {
+    background-color: #f2f2f2;
+    padding: 20px;
+    margin: 20px;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .text img {
+    width: 15px; 
+    height: auto; /* 세로 크기는 가로 크기에 맞게 자동 조정 */
+  }
+  body {
+    background-color: #f2f2f2; /* 배경색 변경 */
+  }
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 10px;
+    height: 500px;
+    margin-right: 30px;
+    margin-bottom: 100px; 
+  }
+  .box {
+    border: 1px solid #ddd;
+    background-color: #ffffff;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+    margin-left: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* 둥근 테두리 추가 */
+    border-radius: 10px;
+  }
+</style>
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+  <title>Graph</title>
+</head>
+
+<header>
+  <nav>
+      <button onclick="closeWindow()" style="background-color:white; font-size: 1.0em;">
+          <i class="bi bi-x"></i>
+      </button>
+      
+  </nav>
+</header>
+
+<div style="display: flex; align-items: center;">
+
+ 
+    <img src="{% static 'images/user.png' %}" alt="사용자 사진" style="width: 20px; margin-left: 20px; margin-right: 5px; height: auto; ">  {{ person_name }}
+  
+  <select class="custom-select" onchange="callFunction(this.value)" style="text-align: center; margin-left: 660px; ">
+    <option value="item1">하루</option>
+    <option value="item2" selected>일주일</option>
+  </select>
+
+  <div class="text" id="day_step_hr" style="display: none; margin-left: 400px;">
+    <img src="{% static 'images/step.png' %}"  style=" width: 20px; height: auto;margin-left: 30px; " alt="사용자 아이콘" >  걸음수 {{context.step}} 
+      <img src="{% static 'images/heart.png' %}"style=" width: 20px; height: auto; margin-left: 10px;  " alt="심박수 아이콘"> 평균 심박수 {{context.heart_rate}}
+    
+  </div>
+</div>
+</div>
+</div>
+
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script> function closeWindow() {
+    window.close();
+    }</script>
+    <script type="text/javascript">
+      var date = {{ context.date|safe }};
+      
+      // 변수 값 출력
+      console.log(date);
+  
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart_sleep);
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart_sleep_week);
+
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart_CalActivity);
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart_CalActivity_week);
+
+      google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawChart_step);
+      google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawChart_step_week);
+      
+      google.charts.load('current', {packages: ['corechart', 'line']});
+      google.charts.setOnLoadCallback(drawChart_heartrate);
+      google.charts.load('current', {packages: ['corechart', 'line']});
+      google.charts.setOnLoadCallback(drawChart_heartrate_week);
+
+      
+      function callFunction(selectedValue) {
+        // Get references to graph box elements
+        // Perform actions based on selected value
+        if (selectedValue === "item1") {
+          box_heartrate.style.display = "none";
+          box_step.style.display = "none";
+          day_step_hr.style.display= "block";
+          box_step.style.border = "2px solid #ffffff";
+          drawChart_sleep();
+          drawChart_CalActivity();
+       
+        } else if (selectedValue === "item2") {
+          box_heartrate.style.display = "block";
+          box_step.style.display =  "block";
+          day_step_hr.style.display= "none";
+          drawChart_sleep_week();
+          drawChart_CalActivity_week();
+          drawChart_step_week();
+          drawChart_heartrate_week();
+        }
+      }
+      
+        function text_make() {
+          var value1= {{context.step}}; // 출력할 정수 값
+          var value2= {{context.heart_rate}};
+        
+          var outputElement = document.getElementById("graph_step");
+          outputElement.innerHTML = "1일간 걸음수 <br>🚶‍♀️"+ value1+"<br><br>1일간 평균 심박수<br>💗"+value2; // 정수 값 출력
+
+
+        }
+        {% comment %} 수면 그래프  {% endcomment %}
+        function drawChart_sleep() {
+          var sleep_total_day = {{ context.sleep_total_day}};
+          var sleep_total_day =sleep_total_day.toFixed(2);
+
+          var data = google.visualization.arrayToDataTable([
+            ['sleep', 'Hours per Day'],
+            ['깊은 수면',     {{context.sleep_deep_day}} ],
+            ['렘 수면',      {{context.sleep_rem_day}}],
+            ['얕은 수면',  {{context.sleep_light_day}}],
+          ]);
+  
+          var options = {
+            title: '1일 총 수면 시간(h) : '+sleep_total_day+"시간",
+
+            pieHole: 0.4,
+            colors: ['#FF91AD', '#9EEA86', '#95D2FD'],
+          };
+  
+          var chart = new google.visualization.PieChart(document.getElementById('graph_sleep'));
+          chart.draw(data, options);
+        }
+
+        function drawChart_sleep_week() {
+      
+          var sleep_deep_week = {{ context.sleep_deep_week}};
+          var sleep_rem_week = {{ context.sleep_rem_week}};
+          var sleep_light_week = {{ context.sleep_light_week}};
+          var sleep_total_week = {{ context.sleep_total_week}}/7;
+          var sleep_total_week =sleep_total_week.toFixed(2);
+
+          
+          var data = google.visualization.arrayToDataTable([
+            ['sleep', 'Hours per Day'],
+            ['깊은 수면',     sleep_deep_week/7],
+            ['렘 수면',      sleep_rem_week/7],
+            ['얕은 수면',  sleep_light_week/7],
+          ]);
+  
+          var options = {
+            title: '일주일 평균 수면 시간(h) : '+ sleep_total_week.toString()+"시간",
+
+            pieHole: 0.4,
+            colors: ['#FF91AD', '#CFB5F2', '#95D2FD'],
+          };
+  
+          var chart = new google.visualization.PieChart(document.getElementById('graph_sleep'));
+          chart.draw(data, options);
+        }
+        {% comment %} 칼로리 & 활동 시간 그래프 {% endcomment %}
+          
+        function drawChart_CalActivity() {
+          var data = google.visualization.arrayToDataTable([
+            ['day', '칼로리', '활동시간'],
+            [date[date.length - 1], {{context.cal}}, {{context.time_activity}}],
+          ]);
+        
+          var options = {
+            
+            title: '1일간 총 소모 칼로리 / 활동 시간(m)',
+            bars: 'horizontal', // Required for Material Bar Charts.
+            colors: ['#FF91AD', '#95D2FD'],
+            legend: {
+              textStyle: {
+                fontSize: 12 // 원하는 폰트 크기로 설정
+              }
+            },
+            
+            
+        
+            hAxis: {
+              title: '칼로리 / 활동 시간', // 가로축 제목 설정
+              textStyle: {
+                fontSize: 12 // 가로축 레이블 폰트 크기 설정
+              }
+            },
+            bar: { 
+              groupWidth: '50%' // 바의 너비 조절
+            },
+          };
+        
+          var chart = new google.visualization.ColumnChart(document.getElementById('graph_CalAct'));
+        
+          chart.draw(data, options);
+        }
+        
+          
+          function drawChart_CalActivity_week() {
+            var cal_week = {{ context.cal_week}};
+            var time_activity_week = {{ context.time_activity_week}};
+            var data = google.visualization.arrayToDataTable([
+            ['week', '칼로리', '활동시간'],
+            [date[date.length - 7], cal_week[0], time_activity_week[0]],
+            [date[date.length - 6], cal_week[1], time_activity_week[1]],
+            [date[date.length - 5], cal_week[2], time_activity_week[2]],
+            [date[date.length - 4], cal_week[3], time_activity_week[3]],
+            [date[date.length - 3], cal_week[4], time_activity_week[4]],
+            [date[date.length - 2], cal_week[5], time_activity_week[5]],
+            [date[date.length - 1], cal_week[6], time_activity_week[6]]
+          ]);
+  
+          var options = {
+            
+            title: '일주일 총 소모 칼로리 / 활동 시간(m)',
+            titleTextStyle: {
+              color: 'black', // 타이틀 색상 변경
+              fontSize: 13 // 타이틀 폰트 크기 변경
+            },
+            bars: 'horizontal', // Required for Material Bar Charts.
+            colors: ['#FF91AD', '#95D2FD'],
+            legend: {
+              textStyle: {
+                fontSize: 12 // 원하는 폰트 크기로 설정
+              }
+            },
+            chartArea: {
+              left: 60, // 왼쪽 패딩 설정
+              top: 40, // 위쪽 패딩 설정
+              right: 20, // 오른쪽 패딩 설정
+              bottom: 60 // 아래쪽 패딩 설정
+            }
+          };
+  
+          var chart = new google.charts.Bar(document.getElementById('graph_CalAct'));
+  
+          chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+
+        {% comment %} 걸음수 그래프 {% endcomment %}
+
+        function drawChart_step() {
+          var data = google.visualization.arrayToDataTable([
+            ["Element", "Density", { role: "style" } ],
+            ["9:00", 528, "#95D2FD"],
+            ["12:00", 1233, "#95D2FD"],
+            ["15:00", 312, "#95D2FD"],
+            ["18:00", 2542, "color: #95D2FD"],
+            ["21:00", 1233, "#95D2FD"],
+            ["24:00", 812, "#95D2FD"],
+          ]);
+        
+          var view = new google.visualization.DataView(data);
+          view.setColumns([0, 1,
+            { calc: "stringify",
+              sourceColumn: 1,
+              type: "string",
+              role: "annotation" },
+            2]);
+        
+          var options = {
+            title: "1일간 시간별 걸음수",
+            width: 600,
+            height: 400,
+            bar: { groupWidth: "95%" },
+            legend: { position: "none" },
+          };
+          
+          var chart = new google.visualization.ColumnChart(document.getElementById("graph_step"));
+          chart.draw(view, options);
+        }
+
+        function drawChart_step_week() {
+          var step_week = {{ context.step_week}}
+          
+          console.log(step_week)
+          var data = google.visualization.arrayToDataTable([
+            ["Element", "걸음수", { role: "style" } ],
+            [date[date.length - 7], step_week[0], "#C9B8EE"],
+            [date[date.length - 6],step_week[1],"#CFB5F2"],
+            [date[date.length - 5],step_week[2], "#CFB5F2"],
+            [date[date.length - 4],step_week[3], "color: #C9B8EE"],
+            [date[date.length - 3],step_week[4], "color: #CFB5F2"],
+            [date[date.length - 2],step_week[5], "color: #CFB5F2"],
+            [date[date.length - 1], step_week[6],"color: #C9B8EE"]
+            
+          ]);
+          
+          var view = new google.visualization.DataView(data);
+          view.setColumns([0, 1,
+            { calc: "stringify",
+              sourceColumn: 1,
+              type: "string",
+              role: "annotation" },
+            2]);
+        
+          var options = {
+            title: "일주일간 총 걸음수",
+            width: 600,
+            height: 400,
+            bar: { groupWidth: "95%" },
+            legend: { position: "none" },
+          };
+        
+          var chart = new google.visualization.ColumnChart(document.getElementById("graph_step"));
+          chart.draw(view, options);
+        }
+        
+        {% comment %} 심박수 그래프 {% endcomment %}
+        function drawChart_heartrate() {
+          var data = new google.visualization.DataTable();
+          data.addColumn('number', 'X');
+          data.addColumn('number', '심박수');
+        
+          data.addRows([
+            [0, 105],    [1, 65],   [2, 65],  [3, 65],   [4, 65],  [5, 65],
+            [6, 65],   [7, 57],  [8, 73],  [9, 80],  [10, 72], [11, 55],
+            [12, 80], [13, 80], [14, 202], [15, 27], [16, 144], [17,148],
+            [18, 72], [19, 54], [20, 42], [21, 50], [22, 156], [23, 157],
+            [24, 160]
+            
+          ]);
+        
+          var options = {
+            title: '1일간 시간별 심박수', 
+            hAxis: {
+              title: 'Time'
+            },
+            vAxis: {
+              title: 'Popularity'
+            },
+            series: {
+              0: {curveType: 'function'}
+            }, 
+            colors: ['#FA70AB']
+          };
+        
+          var chart = new google.visualization.LineChart(document.getElementById('graph_heartrate'));
+          chart.draw(data, options);
+        }
+
+        function drawChart_heartrate_week() {
+          var heart_rate_7 = {{ context.heart_rate_week }};
+          console.log(heart_rate_7);
+          
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', '날짜'); // X축에 사용할 'date' 형식으로 변경
+          data.addColumn('number', '심박수');
+        
+          data.addRows([
+            [date[1], heart_rate_7[0]], // 첫 번째 요소에 해당하는 날짜로 'new Date()' 대신 실제 날짜 값을 사용
+            [date[1], heart_rate_7[1]], // 두 번째 요소에 해당하는 날짜로 'new Date()' 대신 실제 날짜 값을 사용
+            [date[1], heart_rate_7[2]], // 세 번째 요소에 해당하는 날짜로 'new Date()' 대신 실제 날짜 값을 사용
+            [date[1], heart_rate_7[3]], // 네 번째 요소에 해당하는 날짜로 'new Date()' 대신 실제 날짜 값을 사용
+            [date[1], heart_rate_7[4]], // 다섯 번째 요소에 해당하는 날짜로 'new Date()' 대신 실제 날짜 값을 사용
+            [date[1], heart_rate_7[5]], // 여섯 번째 요소에 해당하는 날짜로 'new Date()' 대신 실제 날짜 값을 사용
+            [date[1], heart_rate_7[6]]  // 일곱 번째 요소에 해당하는 날짜로 'new Date()' 대신 실제 날짜 값을 사용
+          ]);
+        
+          var options = {
+            title: '일주일 심박수',
+            hAxis: {
+              title: '날짜'
+            },
+            vAxis: {
+              title: '심박수'
+            },
+            series: {
+              0: { curveType: 'function' }
+            },
+            colors: ['#FF91AD']
+          };
+        
+          var chart = new google.visualization.LineChart(document.getElementById('graph_heartrate'));
+          chart.draw(data, options);
+        }
+    </script>
+  </head>
+      
+  <body>
+    <div class="container">
+      <div class="box" id="box_sleep" >
+        <div id="graph_sleep" style="width: 100%; height: 100%;"></div>
+      </div>
+      <div class="box" id="box_CalAct">
+          <div id="graph_CalAct" style="width: 100%; height: 100%;"></div>
+        </div>
+      <div class="box" id="box_step" >
+          <div id="graph_step" style="width: 100%; height: 100%;"></div>
+        </div>
+        <div class="box" id="box_heartrate" >
+          <div id="graph_heartrate" style="width: 100%; height: 100%;"></div>
+        </div>
+    </div>
+  </body>
+</html>

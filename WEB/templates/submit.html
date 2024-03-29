@@ -1,0 +1,313 @@
+{% load static %}
+
+<style>
+    #wearableData,
+    #id_file2 {
+        color: #001C30;
+        font-weight: 600;
+
+    }
+
+    .btn-secondary {
+        color: #fff;
+        background-color: #1e88ff;
+        border-color: #1e88ff;
+        margin-top: 3px;
+    }
+
+    .btn-secondary:hover {
+        color: #fff;
+        background-color: #004848;
+        border-color: #004444;
+    }
+
+    .btn-check:focus+.btn-secondary,
+    .btn-secondary:focus {
+        color: #fff;
+        background-color: #004848;
+        border-color: #004444;
+        -webkit-box-shadow: 0 0 0 0.25rem rgba(38, 111, 111, 0.5);
+        box-shadow: 0 0 0 0.25rem rgba(38, 111, 111, 0.5);
+    }
+
+    .btn-check:checked+.btn-secondary,
+    .btn-check:active+.btn-secondary,
+    .btn-secondary:active,
+    .btn-secondary.active,
+    .show>.btn-secondary.dropdown-toggle {
+        color: #fff;
+        background-color: #004444;
+        border-color: #004040;
+    }
+
+    .btn-check:checked+.btn-secondary:focus,
+    .btn-check:active+.btn-secondary:focus,
+    .btn-secondary:active:focus,
+    .btn-secondary.active:focus,
+    .show>.btn-secondary.dropdown-toggle:focus {
+        -webkit-box-shadow: 0 0 0 0.25rem rgba(38, 111, 111, 0.5);
+        box-shadow: 0 0 0 0.25rem rgba(38, 111, 111, 0.5);
+    }
+
+    .btn-secondary:disabled,
+    .btn-secondary.disabled {
+        color: #fff;
+        background-color: #1e88ff;
+        border-color: #1e88ff;
+    }
+</style>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap5" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap-grid.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-reboot.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-utilities.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/tiny-slider.css' %}">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+
+    <title>DocDoc</title>
+</head>
+
+
+<body>
+
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close">
+                <span class="icofont-close js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div>
+
+    <nav class="site-nav" style="padding-top: 10px;">
+        <div class="container">
+            <form action="{% url 'login:logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link" style="left: 92%;">
+                    <i class="bi bi-box-arrow-in-right"
+                        style="color: whitesmoke; font-size: 30px;line-height: 22px;"></i>
+                </button>
+            </form>
+            <div class="menu-bg-wrap">
+                <div class="site-navigation">
+                    <a href="/main" class="logo m-0 float-start">DOCDOC</a>
+                    <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+                        <li><a href="/main">Home</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li class="active has-children" id="service-menu">
+                            <a href="#">Service</a>
+                            <ul class="dropdown">
+                                <li><a href="/submit">Submit</a></li>
+                                <li><a href="/search_main">Search</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="/board">Board</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                    </ul>
+
+                    <a href="#"
+                        class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+                        data-toggle="collapse" data-target="#main-navbar">
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+
+        <div class="hero-slide">
+            <div class="img overlay" style="background-image: url('{% static 'images/doc_2.jpeg' %}')"></div>
+        </div>
+
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-9 text-center">
+                    <h1 class="heading" data-aos="fade-up">의료 보고서 작성하기</h1>
+                    <hr class="custom-hr" data-aos="fade-up">
+                    </hr>
+
+                    <form method="post" action="{% url 'file_upload_app:submit' %}" enctype="multipart/form-data"
+                        class="centered-form" data-aos="fade-up">
+                        {% csrf_token %}
+                        <div class="row billboard-row" style="justify-content: space-around;">
+                            <div class="col-lg-3 billboard-input">
+                                <p style="color:whitesmoke">환자 성명, 식별 ID 등</p>
+                                {{ form.name }}
+                            </div>
+                            <div class="col-lg-3 billboard-input">
+                                <p style="color:whitesmoke">나이</p>
+                                {{ form.age }}
+                            </div>
+                            <div class="col-lg-3 billboard-input">
+                                <p style="color:whitesmoke">음성 데이터</p>
+                                {% comment %} {{ form.file }} {% endcomment %}
+                                <input type="file" id="wearableData" name="wearableData" accept="audio/*">
+                                <button type="button" class="btn-secondary" id="startRecordingButton"
+                                    style="float: left;">녹음 시작</button>
+
+                            </div>
+                            <div class="col-lg-3 billboard-input">
+                                <p style="color:whitesmoke">웨어러블 데이터</p>
+                                {{ form.file2 }}
+
+
+                                {% if form.file.errors %}
+                                <ul class="errorlist">
+                                    {% for error in form.file.errors %}
+                                    <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-3 billboard-btn" style="flex:auto;">
+                                <br><br>
+                                <input type="submit" class="btn btn-primary" value="Submit">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+
+    <div class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4" style="width: 50%;">
+                    <div class="widget">
+                        <h3>Contact</h3>
+                        <address>15, Mudeung-ro 202beon-gil, Buk-gu,
+                            Gwangju, Republic of Korea</address>
+                    </div>
+                </div>
+                <div class="col-lg-4" style="width: 50%;">
+                    <div class="widget">
+                        <h3>Sources</h3>
+                        <ul style="display: flex; justify-content: space-between; padding:0px; ">
+                            <p><a href="/about">About us</a></p>
+                            <p><a href="/submit">Submit</a></p>
+                            <p><a href="/search">Search</a></p>
+                            <p><a href="/board">Board</a></p>
+                            <p><a href="/contact">Contact us</a></p>
+                            <p><a href="/use_acc">Privacy</a></p>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <!-- 
+         **==========
+         NOTE: 
+         Please don't remove this copyright link unless you buy the license here https://untree.co/license/  
+         **==========
+        -->
+                    <p>Copyright KT &copy;
+                        <script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash;
+                        Designed with love by <a href="https://untree.co">Untree.co</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Preloader -->
+    <div id="overlayer"></div>
+    <div class="loader">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/tiny-slider.js' %}"></script>
+    <script src="{% static 'js/aos.js' %}"></script>
+    <script src="{% static 'js/navbar.js' %}"></script>
+    <script src="{% static 'js/counter.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+
+    <script>
+        // Service 메뉴 클릭 시 이벤트 처리
+        document.getElementById("service-menu").addEventListener("click", function (event) {
+            event.preventDefault(); // 링크 이동을 막음
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/mic-recorder-to-mp3/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script>
+        const recordButton = document.getElementById('startRecordingButton');
+        let isRecording = false;
+        let recorder;
+
+        recordButton.addEventListener('click', () => {
+            if (!isRecording) {
+                startRecording();
+            } else {
+                stopRecording();
+            }
+        });
+
+        function startRecording() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    recorder = new MicRecorder({ bitRate: 128 });
+                    recorder.start().catch(err => console.error(err));
+                    isRecording = true;
+                    recordButton.textContent = '녹음 중지';
+                })
+                .catch(err => console.error(err));
+        }
+
+        function stopRecording() {
+            recorder.stop()
+                .getMp3().then(([buffer, blob]) => {
+                    const file = new File(buffer, 'recorded_audio.wav', { type: blob.type });
+                    recorder = null;
+                    isRecording = false;
+                    console.log(isRecording)
+                    recordButton.textContent = '녹음 시작';
+
+                    // 파일 변경을 위한 추가 코드
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+
+                    const wearableDataInput = document.getElementById('wearableData');
+                    wearableDataInput.files = dataTransfer.files;
+                })
+                .catch(err => console.error(err));
+        }
+    </script>
+
+
+</body>
+
+</html>
